@@ -15,7 +15,7 @@
         <service id="fos_oauth_server.security.authentication.authenticator" class="%fos_oauth_server.security.authentication.authenticator.class%" public="false">
             <argument type="service" id="fos_oauth_server.server" />
             <argument type="service" id="security.user_checker" />
-            <argument /> <!-- user provider -->
+            <argument type="service" id="security.user_providers"/> <!-- id: the name of your user provider service -->
         </service>
 
         <service id="fos_oauth_server.security.authentication.provider" class="%fos_oauth_server.security.authentication.provider.class%" public="false">
