@@ -67,7 +67,7 @@ class OAuthAuthenticator implements AuthenticatorInterface
     /**
      * {@inheritdoc}
      */
-    public function authenticate(Request $request): UserPassportInterface
+    public function authenticate(Request $request): PassportInterface
     {
         // remove the authorization header from the request on this check
         $tokenString = $this->serverService->getBearerToken($request, true);
