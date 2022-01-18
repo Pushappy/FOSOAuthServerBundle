@@ -23,6 +23,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AccountStatusException;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
 use Symfony\Component\Security\Core\User\UserCheckerInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
@@ -83,7 +84,7 @@ class OAuthAuthenticator implements AuthenticatorInterface
                 : null
             ;
         } catch (OAuth2AuthenticateException $e) {
-            // do nothing - credentials will remain unresolved below
+            throw new CustomUserMessageAuthenticationException("The access token provided is invalid");
         }
 
         // configure the passport badges, ensuring requisite string types
