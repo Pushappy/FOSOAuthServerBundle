@@ -22,6 +22,7 @@ use FOS\OAuthServerBundle\Model\ClientManagerInterface;
 use FOS\OAuthServerBundle\Model\RefreshToken;
 use FOS\OAuthServerBundle\Model\RefreshTokenManagerInterface;
 use FOS\OAuthServerBundle\Storage\OAuthStorage;
+use Symfony\Component\PasswordHasher\Hasher\PasswordHasherFactoryInterface;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -50,9 +51,9 @@ class OAuthStorageTest extends \PHPUnit\Framework\TestCase
      */
     protected $userProvider;
     /**
-     * @var EncoderFactoryInterface&\PHPUnit\Framework\MockObject\MockObject
+     * @var PasswordHasherFactoryInterface&\PHPUnit\Framework\MockObject\MockObject
      */
-    protected $encoderFactory;
+    protected $passwordHasherFactory;
     /**
      * @var OAuthStorage
      */
@@ -80,12 +81,12 @@ class OAuthStorageTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock()
         ;
-        $this->encoderFactory = $this->getMockBuilder(EncoderFactoryInterface::class)
+        $this->passwordHasherFactory = $this->getMockBuilder(PasswordHasherFactoryInterface::class)
             ->disableOriginalConstructor()
             ->getMock()
         ;
 
-        $this->storage = new OAuthStorage($this->clientManager, $this->accessTokenManager, $this->refreshTokenManager, $this->authCodeManager, $this->userProvider, $this->encoderFactory);
+        $this->storage = new OAuthStorage($this->clientManager, $this->accessTokenManager, $this->refreshTokenManager, $this->authCodeManager, $this->userProvider, $this->passwordHasherFactory);
     }
 
     public function testGetClientReturnsClientWithGivenId(): void
