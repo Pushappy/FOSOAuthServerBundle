@@ -24,6 +24,7 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AccountStatusException;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
+use Symfony\Component\Security\Core\User\ChainUserProvider;
 use Symfony\Component\Security\Core\User\UserCheckerInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
@@ -72,7 +73,7 @@ class OAuthAuthenticator implements AuthenticatorInterface
     {
         // remove the authorization header from the request on this check
         $tokenString = $this->serverService->getBearerToken($request, true);
-        $accessToken = $scope = $user = $username = null;
+        $accessToken = $scope = $user = $username = $userLoader = null;
 
         try {
             $accessToken = $this->serverService->verifyAccessToken($tokenString);
@@ -87,8 +88,22 @@ class OAuthAuthenticator implements AuthenticatorInterface
             throw new CustomUserMessageAuthenticationException("The access token provided is invalid");
         }
 
+        // check for matching user provider if chain is used, else default will be used as stated by UserBadge.
+        if ($this->userProvider instanceof ChainUserProvider) {
+            foreach ($this->userProvider->getProviders() as $provider) {
+                if (!$provider->supportsClass(get_class($user))) { continue; }
+
+                // supported user provider found.
+                $userLoader = function(string $identifier) use ($provider) {
+                    return $provider->loadUserByIdentifier($identifier);
+                };
+
+                break;
+            }
+        }
+
         // configure the passport badges, ensuring requisite string types
-        $userBadge = new UserBadge($username ?? '');
+        $userBadge = new UserBadge($username ?? '', $userLoader);
         $credentials = new OAuthCredentials($tokenString ?? '', $scope ?? '');
 
         // check the user if not null
@@ -129,9 +144,7 @@ class OAuthAuthenticator implements AuthenticatorInterface
 
             // get the passport badges
             $credentials = $passport->getBadge(OAuthCredentials::class);
-            $user = $this->userProvider->loadUserByUsername(
-                $passport->getBadge(UserBadge::class)->getUserIdentifier()
-            );
+            $user = $passport->getBadge(UserBadge::class)->getUser();
 
             // check the user
             try {
