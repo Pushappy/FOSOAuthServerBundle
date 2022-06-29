@@ -14,10 +14,12 @@ declare(strict_types=1);
 namespace FOS\OAuthServerBundle\Storage;
 
 use FOS\OAuthServerBundle\Model\AccessTokenManagerInterface;
+use FOS\OAuthServerBundle\Model\AuthCodeInterface;
 use FOS\OAuthServerBundle\Model\AuthCodeManagerInterface;
 use FOS\OAuthServerBundle\Model\ClientInterface;
 use FOS\OAuthServerBundle\Model\ClientManagerInterface;
 use FOS\OAuthServerBundle\Model\RefreshTokenManagerInterface;
+use FOS\OAuthServerBundle\Model\TokenInterface;
 use OAuth2\IOAuth2GrantClient;
 use OAuth2\IOAuth2GrantCode;
 use OAuth2\IOAuth2GrantExtension;
@@ -96,7 +98,7 @@ class OAuthStorage implements IOAuth2RefreshTokens, IOAuth2GrantUser, IOAuth2Gra
         return $this->clientManager->findClientByPublicId($clientId);
     }
 
-    public function checkClientCredentials(IOAuth2Client $client, $client_secret = null)
+    public function checkClientCredentials(IOAuth2Client $client, $client_secret = null): bool
     {
         if (!$client instanceof ClientInterface) {
             throw new \InvalidArgumentException('Client has to implement the ClientInterface');
@@ -105,17 +107,21 @@ class OAuthStorage implements IOAuth2RefreshTokens, IOAuth2GrantUser, IOAuth2Gra
         return $client->checkSecret($client_secret);
     }
 
-    public function checkClientCredentialsGrant(IOAuth2Client $client, $client_secret)
+    public function checkClientCredentialsGrant(IOAuth2Client $client, $client_secret): bool
     {
         return $this->checkClientCredentials($client, $client_secret);
     }
 
+    /**
+     * @param string $token
+     * @return ?TokenInterface
+     */
     public function getAccessToken($token)
     {
         return $this->accessTokenManager->findTokenByToken($token);
     }
 
-    public function createAccessToken($tokenString, IOAuth2Client $client, $data, $expires, $scope = null)
+    public function createAccessToken($tokenString, IOAuth2Client $client, $data, $expires, $scope = null): TokenInterface
     {
         if (!$client instanceof ClientInterface) {
             throw new \InvalidArgumentException('Client has to implement the ClientInterface');
@@ -145,7 +151,7 @@ class OAuthStorage implements IOAuth2RefreshTokens, IOAuth2GrantUser, IOAuth2Gra
         return in_array($grant_type, $client->getAllowedGrantTypes(), true);
     }
 
-    public function checkUserCredentials(IOAuth2Client $client, $identifier, $password)
+    public function checkUserCredentials(IOAuth2Client $client, $identifier, $password): bool|array
     {
         if (!$client instanceof ClientInterface) {
             throw new \InvalidArgumentException('Client has to implement the ClientInterface');
@@ -173,6 +179,7 @@ class OAuthStorage implements IOAuth2RefreshTokens, IOAuth2GrantUser, IOAuth2Gra
 
     /**
      * {@inheritdoc}
+     * @return AuthCodeInterface|null
      */
     public function getAuthCode($code)
     {
@@ -202,6 +209,7 @@ class OAuthStorage implements IOAuth2RefreshTokens, IOAuth2GrantUser, IOAuth2Gra
 
     /**
      * {@inheritdoc}
+     * @return ?TokenInterface
      */
     public function getRefreshToken($tokenString)
     {
@@ -246,6 +254,7 @@ class OAuthStorage implements IOAuth2RefreshTokens, IOAuth2GrantUser, IOAuth2Gra
 
     /**
      * {@inheritdoc}
+     * @return mixed
      */
     public function checkGrantExtension(IOAuth2Client $client, $uri, array $inputData, array $authHeaders)
     {

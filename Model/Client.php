@@ -51,7 +51,7 @@ class Client implements ClientInterface
         $this->setSecret(Random::generateToken());
     }
 
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
@@ -67,7 +67,7 @@ class Client implements ClientInterface
     /**
      * {@inheritdoc}
      */
-    public function getRandomId()
+    public function getRandomId(): string
     {
         return $this->randomId;
     }
@@ -75,7 +75,7 @@ class Client implements ClientInterface
     /**
      * {@inheritdoc}
      */
-    public function getPublicId()
+    public function getPublicId(): string
     {
         return sprintf('%s_%s', $this->getId(), $this->getRandomId());
     }
@@ -91,7 +91,7 @@ class Client implements ClientInterface
     /**
      * {@inheritdoc}
      */
-    public function getSecret()
+    public function getSecret(): string
     {
         return $this->secret;
     }
@@ -99,7 +99,7 @@ class Client implements ClientInterface
     /**
      * {@inheritdoc}
      */
-    public function checkSecret($secret)
+    public function checkSecret($secret): bool
     {
         return null === $this->secret || $secret === $this->secret;
     }
@@ -115,7 +115,7 @@ class Client implements ClientInterface
     /**
      * {@inheritdoc}
      */
-    public function getRedirectUris()
+    public function getRedirectUris(): array
     {
         return $this->redirectUris;
     }
@@ -131,7 +131,7 @@ class Client implements ClientInterface
     /**
      * {@inheritdoc}
      */
-    public function getAllowedGrantTypes()
+    public function getAllowedGrantTypes(): array
     {
         return $this->allowedGrantTypes;
     }

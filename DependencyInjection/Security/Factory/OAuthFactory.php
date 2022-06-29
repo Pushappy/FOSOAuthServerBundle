@@ -30,7 +30,7 @@ class OAuthFactory implements AuthenticatorFactoryInterface, SecurityFactoryInte
     /**
      * {@inheritdoc}
      */
-    public function createAuthenticator(ContainerBuilder $container, string $id, array $config, string $userProviderId)
+    public function createAuthenticator(ContainerBuilder $container, string $id, array $config, string $userProviderId): string
     {
         $providerId = 'fos_oauth_server.security.authentication.authenticator.'.$id;
         $container
@@ -46,7 +46,7 @@ class OAuthFactory implements AuthenticatorFactoryInterface, SecurityFactoryInte
     /**
      * {@inheritdoc}
      */
-    public function create(ContainerBuilder $container, $id, $config, $userProvider, $defaultEntryPoint)
+    public function create(ContainerBuilder $container, $id, $config, $userProvider, $defaultEntryPoint): array
     {
         $providerId = 'security.authentication.provider.fos_oauth_server.'.$id;
         $container
@@ -64,7 +64,7 @@ class OAuthFactory implements AuthenticatorFactoryInterface, SecurityFactoryInte
     /**
      * {@inheritdoc}
      */
-    public function getPosition()
+    public function getPosition(): string
     {
         return 'pre_auth';
     }
@@ -72,7 +72,7 @@ class OAuthFactory implements AuthenticatorFactoryInterface, SecurityFactoryInte
     /**
      * {@inheritdoc}
      */
-    public function getKey()
+    public function getKey(): string
     {
         return 'fos_oauth';
     }

@@ -32,12 +32,12 @@ class OAuthToken extends AbstractToken
         $this->token = $token;
     }
 
-    public function getToken()
+    public function getToken(): string
     {
         return $this->token;
     }
 
-    public function getCredentials()
+    public function getCredentials(): mixed
     {
         return $this->token;
     }
