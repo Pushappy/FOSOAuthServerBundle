@@ -25,7 +25,7 @@ use Symfony\Component\DependencyInjection\Reference;
  *
  * @author Arnaud Le Blanc <arnaud.lb@gmail.com>
  */
-class OAuthFactory implements AuthenticatorFactoryInterface, SecurityFactoryInterface
+class OAuthFactory implements AuthenticatorFactoryInterface
 {
     /**
      * {@inheritdoc}
@@ -82,5 +82,10 @@ class OAuthFactory implements AuthenticatorFactoryInterface, SecurityFactoryInte
      */
     public function addConfiguration(NodeDefinition $node)
     {
+    }
+
+    public function getPriority(): int
+    {
+        return 0;
     }
 }

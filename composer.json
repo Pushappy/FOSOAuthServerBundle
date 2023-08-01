@@ -21,11 +21,11 @@
     ],
     "require": {
         "php": "^7.2 || ^8.0",
-        "friendsofsymfony/oauth2-php": "~1.1",
-        "symfony/dependency-injection": "^4.4 || ^5.1",
-        "symfony/framework-bundle": "^4.4 || ^5.1",
-        "symfony/security-bundle": "^4.4 || ^5.1",
-        "symfony/twig-bundle": "^4.4 || ^5.1"
+        "friendsofsymfony/oauth2-php": "dev-sf6",
+        "symfony/dependency-injection": "~5.3|~6.0",
+        "symfony/framework-bundle": "~5.3|~6.0",
+        "symfony/security-bundle": "~5.3|~6.0",
+        "symfony/twig-bundle": "~5.3|~6.0"
     },
     "conflict": {
         "twig/twig": "<1.40 || >=2.0,<2.9"
@@ -46,6 +46,12 @@
         "symfony/yaml": "^4.4 || ^5.1",
         "willdurand/propel-typehintable-behavior": "~1.0"
     },
+    "repositories": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/Pushappy/oauth2-php.git"
+        }
+    ],
     "suggest": {
         "doctrine/doctrine-bundle": "*",
         "doctrine/mongodb-odm-bundle": "*",
