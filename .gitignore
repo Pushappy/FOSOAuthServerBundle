@@ -5,3 +5,9 @@ Propel/om/
 Propel/map/
 composer.lock
 .php_cs.cache
+.idea
+
+.DS_Store
+Tests/.DS_Store
+Security/.DS_Store
+Resources/.DS_Store
